@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const swaggerUI = require('swagger-ui-express');
 const swaggerFile = require('./api-docs/swagger_output.json');
+const {userRouter} = require('./routers/userRouter');
 // const {taskRouter} = require('./routers/taskRouter.js');
 const {createTables} = require('./database/createDatabase');
 
@@ -15,7 +16,8 @@ app.use(cors({
     origin:'*'
 }))
 app.use(bodyParser.json())
-// app.use('/api/task/doc',swaggerUI.serve,swaggerUI.setup(swaggerFile))
+app.use('/api/task/doc',swaggerUI.serve,swaggerUI.setup(swaggerFile));
+app.use('/api/user/',userRouter);
 // app.use('/api/task',taskRouter);
 
 createTables();
@@ -25,4 +27,5 @@ app.listen(PORT,()=>{
 })
 
 module.exports = app;
+
 

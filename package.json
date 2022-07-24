@@ -19,6 +19,7 @@
     "swagger-autogen": "^2.21.5"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",

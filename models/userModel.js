@@ -5,16 +5,16 @@ const defaultProfile = 'default-profile.png';
 
 
 class User{
-    constructor(name,email,password,username){
+    constructor(user){
         this.userId = uuidv4();
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.username = username;
+        this.name = user.name;
+        this.email = user.email;
+        this.password = user.password;
+        this.username = user.username;
         this.profile = path.join(baseProfilePath,defaultProfile);
     }
 }
 
 
 
-module.exports = User;
+module.exports = {User};
