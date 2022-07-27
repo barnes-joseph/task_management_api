@@ -6,10 +6,10 @@ const {checkCreateUserRequest,checkUsernameExists, isValidUser, checkUserExists}
 const multer = require('multer');
 const fileStorageEngine = multer.diskStorage({
     destination: function(req,file,cb){
-        cb(null,'assets/profile');
+        cb(null,'assets/profiles');
     },
     filename: function(req,file,cb){
-        cb(null,'profile--'+req.body.userId + file.originalname)
+        cb(null,'profile--'+Date.now() + "--"+ file.originalname)
     }
 })
 

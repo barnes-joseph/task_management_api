@@ -1,6 +1,6 @@
 const {v4:uuidv4} = require('uuid');
 const path = require('path');
-const defaultProfile = 'assets/profile/default-profile.png';
+const defaultProfile = 'assets/profiles/default-profile.png';
 
 
 class User{

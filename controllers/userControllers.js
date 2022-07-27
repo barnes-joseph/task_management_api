@@ -105,7 +105,7 @@ const updateUserController = async (req,res) => {
             }
         }
         // committing updates to database
-        const updateSql = `UPDATE users SET name=$1,email=$2,username=$3 RETURNING user_id,name,email,username`;
+        const updateSql = `UPDATE users SET name=$1,email=$2,username=$3 RETURNING user_id,name,email,username,profile`;
         const values = [updatedData.name,updatedData.email,updatedData.username];
         const queryRes = await dbClient.query(updateSql,values);
         return res.status(200).json({user:queryRes.rows[0]});
@@ -145,13 +145,12 @@ const changeUserPassword = async (req,res) =>{
 const changeProfilePicture = async (req,res)=>{
     try{
     const profile = req.file.path;
-    const updateSql = `UPDATE users SET profile=$1 WHERE user_id=$2`;
+    const updateSql = `UPDATE users SET profile=$1 WHERE user_id=$2 RETURNING name,username,email,profile`;
     const values = [profile,req.jwtPayload.userId]
-    await dbClient.query(updateSql,values);
-    const fetchProfileSql = `SELECT profile FROM users WHERE user_id=$1`;
-    const newProfile = await dbClient.query(fetchProfileSql,)
-    return res.status(200).json({message:"Update successful"});
+    const updatedUser = await dbClient.query(updateSql,values);
+    return res.status(200).json({user:updatedUser.rows[0]});
     } catch(err){
+        console.log(err)
         return res.status(500).json({error:"An error occurred in the server"})
     }
 
