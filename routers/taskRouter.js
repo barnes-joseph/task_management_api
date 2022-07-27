@@ -1,13 +1,7 @@
 const taskRouter = require('express').Router();
-const {tasksController} = require('../controllers/taskControllers.js')
+const {authenticateUser} = require('../middlewares/authenticateMiddleware')
+const {createTaskController} = require('../controllers/taskControllers')
 
-taskRouter.get('/',tasksController.getTasks);
+taskRouter.post('/',authenticateUser,createTaskController);
 
-taskRouter.get('/:id',tasksController.getTaskById);
-
-taskRouter.post('/',tasksController.createTask);
-
-taskRouter.delete('/:id',tasksController.deleteTaskById);
-
-
-module.exports.taskRouter = taskRouter;
+module.exports = {taskRouter};

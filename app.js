@@ -2,10 +2,27 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 const bodyParser = require('body-parser');
+
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination:function(req,file,callback){
+        callback(null,'/assets/');
+    },
+    filename:function (req,file,callback){
+        callback(null,file.fieldname);
+    }
+})
+const upload = multer({dest:'./assets/profiles/'})
+
 const swaggerUI = require('swagger-ui-express');
-const swaggerFile = require('./api-docs/swagger_output.json')
-const {taskRouter} = require('./routers/taskRouter.js')
+const swaggerFile = require('./api-docs/swagger_output.json');
+
+const {userRouter} = require('./routers/userRouter');
+const {taskRouter} = require('./routers/taskRouter');
+
+const {createTables} = require('./database/createDatabase');
 
 const app = express();
 const PORT = process.env.PORT || 8081
@@ -14,12 +31,17 @@ app.use(cors({
     origin:'*'
 }))
 app.use(bodyParser.json())
-app.use('/api/task/doc',swaggerUI.serve,swaggerUI.setup(swaggerFile))
+app.use(morgan('dev'));
+app.use('/api/docs',swaggerUI.serve,swaggerUI.setup(swaggerFile));
+app.use('/api/user/',userRouter);
 app.use('/api/task',taskRouter);
+
+createTables();
 
 app.listen(PORT,()=>{
     console.log(`Server started on port ${PORT}`);
 })
 
 module.exports = app;
+
 
