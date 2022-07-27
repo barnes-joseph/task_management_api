@@ -19,9 +19,9 @@ function createUserTable(){
     const sql = `CREATE TABLE IF NOT EXISTS "users"(
         "user_id" UUID PRIMARY KEY NOT NULL,
         "name" TEXT NOT NULL,
-        "email" TEXT UNIQUE NOT NULL,
+        "email" TEXT NOT NULL,
         "password" TEXT NOT NULL,
-        "username" TEXT UNIQUE NOT NULL,
+        "username" TEXT NOT NULL,
         "profile" TEXT NOT NULL
         )`
     createTable(sql).then((created)=>{

@@ -1,7 +1,6 @@
 const {v4:uuidv4} = require('uuid');
 const path = require('path');
-const baseProfilePath = path.resolve('assets','profiles');
-const defaultProfile = 'default-profile.png';
+const defaultProfile = 'assets/profile/default-profile.png';
 
 
 class User{
@@ -11,7 +10,7 @@ class User{
         this.email = user.email;
         this.password = user.password;
         this.username = user.username;
-        this.profile = path.join(baseProfilePath,defaultProfile);
+        this.profile = defaultProfile;
     }
 }
 
