@@ -1,12 +1,14 @@
 const dbClient = require('../database/dbConnection');
 const {Task} = require('../models/taskModel')
-const {SubTask} = require('../models/subTaskModel')
+const {SubTask} = require('../models/subTaskModel');
+const { CategoryToTask } = require('../models/categoryToTaskModel');
 
 const createTaskController = (req,res)=>{
    try{
        const userId = req.jwtPayload.userId;
        const task = new Task(req.body,userId);
        const subTasks = [];
+       const categories = [];
        if(task.subTasks.length !== 0){
            const createSubTaskSql = `INSERT INTO subtasks(subtask_id,name,task_id) VALUES($1,$2,$3) RETURNING subtask_id,name`;
            for(let subTask of task.subTasks){
@@ -16,10 +18,20 @@ const createTaskController = (req,res)=>{
                subTasks.push(newSubTask.rows[0]);
            }
        }
+       if(task.category.length !== 0){
+           const addCategorySql = `INSERT INTO categorytotask(entry_id,category_id,task_id)`;
+           for(let category of task.category){
+                const categoryToTaskEntry = new CategoryToTask(category.categoryId,task.taskId);
+                await dbClient.query(addCategorySql,categoryToTaskEntry);
+                const fetchCategorySql = `SELECT * FROM categories WHERE category_id=$1`;
+                const categoryEntry =  await dbClient.query(fetchCategorySql,[category.categoryId]);
+                categories.push(categoryEntry.rows[0]);
+           }
+       }
        const createSql = `INSERT INTO tasks(task_id,user_id,task,start_date,end_date,priority,description,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`;
        const values = [task.taskId,task.userId,task.taskName,task.startDate,task.endDate,task.priority,task.description,task.status];
        const createdTask = await dbClient.query(createSql,values);
-       return res.status(201).json({task:{...createdTask.rows[0],subTasks}});
+       return res.status(201).json({task:{...createdTask.rows[0],subTasks,categories}});
 
    }catch(err){
        console.log(err);
@@ -39,6 +51,79 @@ const getAllTasksByUserIdController = (req,res) =>{
         return res.status(500).json({error:"An error occurred in the server"})
     }
 }
+
+const getAllTasksByCategory = async (req,res) => {
+    try{
+        const categoryId = req.params.id;
+        const userId = req.jwtPayload.userId;
+        const fetchTaskIdsSql = `SELECT task_id FROM categorytotask WHERE category_id=$1`;
+        let taskIds = await dbClient.query(fetchTaskIdsSql,[categoryId])
+        taskIds = taskIds.rows[0];
+        const tasks = []
+        for (let taskId of taskIds){
+            const fetchTasksSql = `SELECT * FROM tasks WHERE user_id=$1 and task_id=$2`;
+            const task = await dbClient.query(fetchTasksSql,[userId,taskId]);
+            tasks.push(task.rows[0]);
+        }
+        return res.status(200).json({tasks:tasks});
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({error:"An error occurred in the server"})
+    }
+}
+
+const getAllTaskByStartDate = async (req,res) =>{
+    try{
+        const startDate = req.params.start;
+        const userId = req.jwtPayload.userId;
+        const fetchSql = `SELECT * FROM tasks WHERE user_id=$1 AND start_date=$2`;
+        const tasks = await dbClient.query(fetchSql,[userId,startDate]);
+        return res.status(200).json({tasks:tasks.rows});
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({error:"An error occurred in the server"})
+    }
+}
+
+const getAllTaskByEndDate = async (req,res) =>{
+    try{
+        const endDate = req.params.end;
+        const userId = req.jwtPayload.userId;
+        const fetchSql = `SELECT * FROM tasks WHERE user_id=$1 AND end_date=$2`;
+        const tasks = await dbClient.query(fetchSql,[userId,endDate]);
+        return res.status(200).json({tasks:tasks.rows});
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({error:"An error occurred in the server"})
+    }
+}
+
+const getAllTaskByPriority = async (req,res) =>{
+    try{
+        const priority = req.params.priority;
+        const userId = req.jwtPayload.userId;
+        const fetchSql = `SELECT * FROM tasks WHERE user_id=$1 AND priority=$2`;
+        const tasks = await dbClient.query(fetchSql,[userId,priority]);
+        return res.status(200).json({tasks:tasks.rows});
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({error:"An error occurred in the server"})
+    }
+}
+
+const getAllTaskByStatus = async (req,res) =>{
+    try{
+        const status = req.params.status;
+        const userId = req.jwtPayload.userId;
+        const fetchSql = `SELECT * FROM tasks WHERE user_id=$1 AND status=$2`;
+        const tasks = await dbClient.query(fetchSql,[userId,status]);
+        return res.status(200).json({tasks:tasks.rows});
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({error:"An error occurred in the server"})
+    }
+}
+
 
 const getTaskByIdController = (req,res) =>{
     try{
@@ -69,4 +154,13 @@ const deleteTaskByIdController = (req,res) => {
     }
 }
 
-module.exports = {createTaskController,getAllTasksByUserIdController,getTaskByIdController,deleteTaskByIdController}
+module.exports = {createTaskController,
+                  getAllTasksByUserIdController,
+                  getTaskByIdController,
+                  deleteTaskByIdController,
+                  getAllTasksByCategory,
+                  getAllTaskByEndDate,
+                  getAllTaskByStartDate,
+                  getAllTaskByPriority,
+                  getAllTaskByStatus
+                }
