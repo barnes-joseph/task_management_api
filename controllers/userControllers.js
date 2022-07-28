@@ -20,14 +20,10 @@ const createUserController = async (req,res) => {
         // hash the password with given salt
         user.password = await bcrypt.hash(user.password,salt);
         // commit user to database
-        const createSql = `INSERT INTO users(user_id,name,email,password,username,profile) VALUES($1,$2,$3,$4,$5,$6)`;
+        const createSql = `INSERT INTO users(user_id,name,email,password,username,profile) VALUES($1,$2,$3,$4,$5,$6) RETURNING user_id,name,email,username,profile`;
         const userValues = [user.userId,user.name,user.email,user.password,user.username,user.profile];
-        await dbClient.query(createSql, userValues);
-        // fetch new user
-        const fetchSql = `SELECT user_id,name,username,profile,email FROM  users WHERE user_id=$1`;
-        const user_id = [user.userId];
-        const newUser = await dbClient.query(fetchSql, user_id)
-        return res.status(201).json({ user: newUser.rows[0]});
+        const newUser = await dbClient.query(createSql, userValues);
+        return res.status(201).json({user:newUser.rows[0]});
     }catch(err){
         console.log(err);
         return res.status(500).json({error:"An error occurred in the server"});
@@ -105,8 +101,8 @@ const updateUserController = async (req,res) => {
             }
         }
         // committing updates to database
-        const updateSql = `UPDATE users SET name=$1,email=$2,username=$3 RETURNING user_id,name,email,username,profile`;
-        const values = [updatedData.name,updatedData.email,updatedData.username];
+        const updateSql = `UPDATE users SET name=$1,email=$2,username=$3 WHERE user_id=$4 RETURNING user_id,name,email,username,profile`;
+        const values = [updatedData.name,updatedData.email,updatedData.username,req.jwtPayload.userId];
         const queryRes = await dbClient.query(updateSql,values);
         return res.status(200).json({user:queryRes.rows[0]});
     }catch(err){
@@ -162,7 +158,7 @@ const deleteUserController = async (req,res) =>{
         const deleteSql = `DELETE FROM users WHERE user_id=$1`;
         const values = [user.user_id];
         const queryRes = await dbClient.query(deleteSql,values);
-        return res.status(201).json();
+        return res.status(200).json({message:"Delete successful"});
     }catch(err){
         return res.status(500).json({error:"An error occurred in the server"})
     }

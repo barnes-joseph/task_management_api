@@ -32,9 +32,11 @@ function createUserTable(){
 
 function createCategoryTable(){
     const sql = `CREATE TABLE IF NOT EXISTS "categories"(
+        "user_id" UUID NOT NULL,
         "category_id" UUID PRIMARY KEY NOT NULL,
         "name" TEXT NOT NULL,
-        "avatar" TEXT
+        "emoji" TEXT,
+        CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(user_id)
         )`
     createTable(sql).then((created)=>{
         if(created)

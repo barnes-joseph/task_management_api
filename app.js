@@ -21,6 +21,7 @@ const swaggerFile = require('./api-docs/swagger_output.json');
 
 const {userRouter} = require('./routers/userRouter');
 const {taskRouter} = require('./routers/taskRouter');
+const {categoryRouter} = require('./routers/categoryRouter')
 
 const {createTables} = require('./database/createDatabase');
 
@@ -33,8 +34,9 @@ app.use(cors({
 app.use(bodyParser.json())
 app.use(morgan('dev'));
 app.use('/api/docs',swaggerUI.serve,swaggerUI.setup(swaggerFile));
-app.use('/api/user/',userRouter);
-app.use('/api/task',taskRouter);
+app.use('/api/taskify/users/',userRouter);
+app.use('/api/taskify/tasks',taskRouter);
+app.use('/api/taskify/categories')
 
 createTables();
 
