@@ -42,7 +42,7 @@ const getAllSubTasksByTaskIdController = async (req,res) => {
     }
 }
 
-const updateSubTaskController = async (req,res) => {
+const updateSubTaskControllerById = async (req,res) => {
     try{
         const subTaskId = req.params.subtaskId;
         const fetchSubTaskSql = `SELECT * FROM subtasks WHERE subtask_id=$1`;
@@ -60,7 +60,7 @@ const updateSubTaskController = async (req,res) => {
 
 }
 
-const deleteSubTaskController = async (req,res) => {
+const deleteSubTaskControllerById = async (req,res) => {
     try{
         const subTaskId = req.params.subtaskId;
         const fetchSubTaskSql = `SELECT * FROM subtasks WHERE subtask_id=$1`;
@@ -77,4 +77,9 @@ const deleteSubTaskController = async (req,res) => {
     }
 }
 
-module.exports = {createSubTaskController,deleteSubTaskController,updateSubTaskController,getAllSubTasksByTaskIdController}
+module.exports = {
+                  createSubTaskController,
+                  deleteSubTaskControllerById,
+                  updateSubTaskControllerById,
+                  getAllSubTasksByTaskIdController
+                }

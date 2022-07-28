@@ -24,6 +24,7 @@ const {taskRouter} = require('./routers/taskRouter');
 const {categoryRouter} = require('./routers/categoryRouter')
 
 const {createTables} = require('./database/createDatabase');
+const { subTaskRouter } = require('./routers/subTaskRouter');
 
 const app = express();
 const PORT = process.env.PORT || 8081
@@ -34,9 +35,10 @@ app.use(cors({
 app.use(bodyParser.json())
 app.use(morgan('dev'));
 app.use('/api/docs',swaggerUI.serve,swaggerUI.setup(swaggerFile));
-app.use('/api/taskify/users/',userRouter);
+app.use('/api/taskify/users',userRouter);
 app.use('/api/taskify/tasks',taskRouter);
-app.use('/api/taskify/categories')
+app.use('/api/taskify/categories',categoryRouter);
+app.use('/api/taskify/subtaks',subTaskRouter);
 
 createTables();
 

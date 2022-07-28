@@ -52,9 +52,31 @@ const getAllTasksByUserIdController = (req,res) =>{
     }
 }
 
+const updateTaskByIdController = (req,res) => {
+    try{
+        const userId = req.jwtPayload.userId;
+        const updates = req.body;
+        const taskId = req.params.taskId;
+        // check if task exists
+        const fetchTaskSql = `SELECT * FROM tasks WHERE task_id=$1 AND user_id=$2`;
+        const task = await dbClient.query(fetchTaskSql,[taskId,userId]);
+        if(task.rowCount===0){
+            return res.status(404).json({error:"An error occurred in the server"});
+        }
+        const updatedDetails = {...task.rows[0],...updates};
+        const updateSql = `UPDATE tasks SET task=$1,start_date=$2,end_date=$3,priority=$4,description=$5,status=$6 WHERE task_id=$7 RETURNING *`;
+        const values = [updatedDetails.task,updatedDetails.startDate,updatedDetails.endDate,updatedDetails.priority,updatedDetails.description,updatedDetails.status,taskId];
+        const updatedTask = await dbClient.query(updateSql,values);
+        return res.status(200).json({task:updatedTask.rows[0]});
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({error:"An error occurred in the server"})
+    }
+}
+
 const getAllTasksByCategory = async (req,res) => {
     try{
-        const categoryId = req.params.id;
+        const categoryId = req.params.categoryId;
         const userId = req.jwtPayload.userId;
         const fetchTaskIdsSql = `SELECT task_id FROM categorytotask WHERE category_id=$1`;
         let taskIds = await dbClient.query(fetchTaskIdsSql,[categoryId])
@@ -72,26 +94,20 @@ const getAllTasksByCategory = async (req,res) => {
     }
 }
 
-const getAllTaskByStartDate = async (req,res) =>{
+const getAllTaskByDate = async (req,res) =>{
     try{
-        const startDate = req.params.start;
+        const startDate = req.query.start;
+        const endDate = req.query.end;
         const userId = req.jwtPayload.userId;
-        const fetchSql = `SELECT * FROM tasks WHERE user_id=$1 AND start_date=$2`;
-        const tasks = await dbClient.query(fetchSql,[userId,startDate]);
-        return res.status(200).json({tasks:tasks.rows});
-    }catch(err){
-        console.log(err);
-        return res.status(500).json({error:"An error occurred in the server"})
-    }
-}
-
-const getAllTaskByEndDate = async (req,res) =>{
-    try{
-        const endDate = req.params.end;
-        const userId = req.jwtPayload.userId;
-        const fetchSql = `SELECT * FROM tasks WHERE user_id=$1 AND end_date=$2`;
-        const tasks = await dbClient.query(fetchSql,[userId,endDate]);
-        return res.status(200).json({tasks:tasks.rows});
+        if(startDate){
+            const fetchSql = `SELECT * FROM tasks WHERE user_id=$1 AND start_date=$2`;
+            const tasks = await dbClient.query(fetchSql,[userId,startDate]);
+            return res.status(200).json({tasks:tasks.rows});
+        }else if(endDate){
+            const fetchSql = `SELECT * FROM tasks WHERE user_id=$1 AND end_date=$2`;
+            const tasks = await dbClient.query(fetchSql,[userId,endDate]);
+            return res.status(200).json({tasks:tasks.rows});
+        }
     }catch(err){
         console.log(err);
         return res.status(500).json({error:"An error occurred in the server"})
@@ -127,7 +143,7 @@ const getAllTaskByStatus = async (req,res) =>{
 
 const getTaskByIdController = (req,res) =>{
     try{
-        const taskId = req.params.id;
+        const taskId = req.params.taskId;
         const fetchSql = `SELECT * FROM tasks WHERE task_id=$1`;
         const task = await dbClient.query(fetchSql,[taskId]);
         if(task.rowCount===0){
@@ -144,7 +160,7 @@ const getTaskByIdController = (req,res) =>{
 
 const deleteTaskByIdController = (req,res) => {
     try{
-        const taskId = req.params.id;
+        const taskId = req.params.taskId;
         const deleteSql = `DELETE FROM tasks WHERE task_id=$1`;
         await dbClient.query(deleteSql,[taskId]);
         return res.status(200).json({message:"Task deleted successfully"});
@@ -159,8 +175,8 @@ module.exports = {createTaskController,
                   getTaskByIdController,
                   deleteTaskByIdController,
                   getAllTasksByCategory,
-                  getAllTaskByEndDate,
-                  getAllTaskByStartDate,
+                  getAllTaskByDate,
                   getAllTaskByPriority,
-                  getAllTaskByStatus
+                  getAllTaskByStatus,
+                  updateTaskByIdController
                 }

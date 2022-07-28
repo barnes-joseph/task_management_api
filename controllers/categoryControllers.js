@@ -25,13 +25,14 @@ const createCategoryController = async (req,res)=>{
     }
 }
 
-const updateCategoryController = async(req,res) =>{
+const updateCategoryControllerById = async(req,res) =>{
     try{
+        const categoryId = req.params.categoryId;
         const newCategory = req.body;
         const oldCategory = req.category;
         const updated = {...oldCategory,...newCategory};
         const updateSql = `UPDATE categories SET name=$1,emoji=$2 WHERE category_id=$3 RETURNING *`;
-        const updatedCategory = await dbClient.query(updateSql,[updated.name,updated.emoji,updated.categoryId]);
+        const updatedCategory = await dbClient.query(updateSql,[updated.name,updated.emoji,categoryId]);
         res.status(200).json({category:updatedCategory.rows[0]});
     }catch(err){
         console.log(err);
@@ -42,7 +43,7 @@ const updateCategoryController = async(req,res) =>{
 
 const getCategoryByNameController = async (req,res) =>{
     try{
-        const categoryName = req.params.name;
+        const categoryName = req.params.categoryName;
         const fetchSql = `SELECT * FROM categories WHERE name=$1 AND user_id=$2`;
         const category = await dbClient.query(fetchSql,[categoryName,req.jwtPayload.userId]);
         if(category.rowCount===0){
@@ -69,7 +70,7 @@ const getAllCategoriesByUserId = async (req,res) =>{
 
 const deleteCategoryByIdController = async (req,res) =>{
     try{
-        const categoryId = req.params.id;
+        const categoryId = req.params.categoryId;
         const deleteSql = `DELETE FROM categories WHERE category_id=$1`;
         await dbClient.query(deleteSql,[categoryId]);
         return res.status(200).json({message:"Delete successful"})
@@ -79,4 +80,8 @@ const deleteCategoryByIdController = async (req,res) =>{
     }
 }
 
-module.exports = {createCategoryController,updateCategoryController,getCategoryByNameController,getAllCategoriesByUserId,deleteCategoryByIdController}
+module.exports = {createCategoryController,
+                  updateCategoryControllerById,
+                  getCategoryByNameController,
+                  getAllCategoriesByUserId,
+                  deleteCategoryByIdController}
