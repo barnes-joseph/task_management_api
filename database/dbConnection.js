@@ -9,6 +9,7 @@ const dbClient = new Client({
 })
 
 dbClient.connect().then(()=>{
+    if(process.env.ENV !== 'test')
     console.log(`Database connected!`)
 });
 

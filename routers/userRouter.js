@@ -9,17 +9,17 @@ const fileStorageEngine = multer.diskStorage({
         cb(null,'assets/profiles');
     },
     filename: function(req,file,cb){
-        cb(null,'profile--'+Date.now() + "--"+ file.originalname)
+        cb(null,'profile--'+ req.jwtPayload.userId + '--' + file.originalname)
     }
 })
 
 const upload = multer({storage:fileStorageEngine});
 
-userRouter.get('/:searchKey',getUser);
+userRouter.get('/',getUser);
 userRouter.post('/',checkCreateUserRequest,checkUsernameExists,createUserController);
 userRouter.post('/login',isValidUser,loginController);
-userRouter.put('/update',authenticateUser,checkUserExists,updateUserController);
-userRouter.delete('/delete',authenticateUser,checkUserExists,deleteUserController);
+userRouter.put('/update',authenticateUser,updateUserController);
+userRouter.delete('/delete',authenticateUser,deleteUserController);
 userRouter.put('/change_password',authenticateUser,changeUserPassword)
 userRouter.put('/update_profile',authenticateUser,upload.single('profile'),changeProfilePicture)
 

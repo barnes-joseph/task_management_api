@@ -38,7 +38,7 @@ app.use('/api/docs',swaggerUI.serve,swaggerUI.setup(swaggerFile));
 app.use('/api/taskify/users',userRouter);
 app.use('/api/taskify/tasks',taskRouter);
 app.use('/api/taskify/categories',categoryRouter);
-app.use('/api/taskify/subtaks',subTaskRouter);
+app.use('/api/taskify/subtasks',subTaskRouter);
 
 createTables();
 

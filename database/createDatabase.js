@@ -15,7 +15,7 @@ async function createTable(query){
     // }
 }
 
-function createUserTable(){
+async function createUserTable(){
     const sql = `CREATE TABLE IF NOT EXISTS "users"(
         "user_id" UUID PRIMARY KEY NOT NULL,
         "name" TEXT NOT NULL,
@@ -24,13 +24,14 @@ function createUserTable(){
         "username" TEXT NOT NULL,
         "profile" TEXT NOT NULL
         )`
-    createTable(sql).then((created)=>{
-        if(created)
+    createTable(sql)
+    .then((created)=>{
+        if(created && process.env.ENV !== 'test')
             console.log('User Table created!');
     })
 }
 
-function createCategoryTable(){
+async function createCategoryTable(){
     const sql = `CREATE TABLE IF NOT EXISTS "categories"(
         "user_id" UUID NOT NULL,
         "category_id" UUID PRIMARY KEY NOT NULL,
@@ -38,26 +39,28 @@ function createCategoryTable(){
         "emoji" TEXT,
         CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(user_id)
         )`
-    createTable(sql).then((created)=>{
-        if(created)
+    createTable(sql)
+    .then((created)=>{
+        if(created && process.env.ENV !== 'test')
             console.log('Category Table created!');
     })
 }
 
-function createSubTaskTable(){
+async function createSubTaskTable(){
     const sql = `CREATE TABLE IF NOT EXISTS "subtasks"(
         "subtask_id" UUID PRIMARY KEY NOT NULL,
         "name" TEXT NOT NULL,
         "task_id" UUID NOT NULL,
         CONSTRAINT fk_task FOREIGN KEY(task_id) REFERENCES tasks(task_id)
         )`
-    createTable(sql).then((created)=>{
-        if(created)
+    createTable(sql)
+    .then((created)=>{
+       if(created && process.env.ENV !== 'test')
             console.log('SubTask Table created!');
     })
 }
 
-function createTaskTable(){
+async function createTaskTable(){
     const sql = `CREATE TABLE IF NOT EXISTS "tasks"(
         "task_id" UUID NOT NULL PRIMARY KEY,
         "user_id" UUID NOT NULL,
@@ -70,13 +73,14 @@ function createTaskTable(){
         "status" INT CHECK (status > 0 AND status < 4),
         CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(user_id)
         )`
-    createTable(sql).then((created)=>{
-        if(created)
+    createTable(sql)
+    .then((created)=>{
+        if(created && process.env.ENV !== 'test')
             console.log('Task Table created!');
     })
 }
 
-function createCategoryToTaskTable(){
+async function createCategoryToTaskTable(){
     const sql = `CREATE TABLE IF NOT EXISTS "taskcategory"(
         "entry_id" UUID PRIMARY KEY NOT NULL,
         "task_id" UUID NOT NULL,
@@ -84,8 +88,9 @@ function createCategoryToTaskTable(){
         CONSTRAINT fk_task FOREIGN KEY(task_id) REFERENCES tasks(task_id),
         CONSTRAINT fk_category FOREIGN KEY(category_id) REFERENCES categories(category_id)
         )`
-    createTable(sql).then((created)=>{
-        if(created)
+    createTable(sql)
+    .then((created)=>{
+        if(created && process.env.ENV !== 'test')
             console.log('CategoryToTask Table created!');
     })
 }

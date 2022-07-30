@@ -1,33 +1,46 @@
 const dbClient = require('../database/dbConnection');
 const {Task} = require('../models/taskModel')
 const {SubTask} = require('../models/subTaskModel');
-const { CategoryToTask } = require('../models/categoryToTaskModel');
+const {CategoryToTask} = require('../models/categoryToTaskModel');
 
-const createTaskController = (req,res)=>{
+const createTaskController = async (req,res)=>{
    try{
        const userId = req.jwtPayload.userId;
        const task = new Task(req.body,userId);
-       const subTasks = [];
+       let subTasks = [];
        const categories = [];
        if(task.subTasks.length !== 0){
-           const createSubTaskSql = `INSERT INTO subtasks(subtask_id,name,task_id) VALUES($1,$2,$3) RETURNING subtask_id,name`;
+           let createSubTaskSql = `INSERT INTO subtasks(subtask_id,name,task_id) `
+           let sqlValues = ''
+           let counter = 1;
            for(let subTask of task.subTasks){
                subTask = new SubTask(subTask,task.taskId);
                const values = [subTask.subTaskId,subTask.name,subTask.parentId];
-               const newSubTask = await dbClient.query(createSubTaskSql,values);
-               subTasks.push(newSubTask.rows[0]);
-           }
+               sqlValues = sqlValues + ',' + `($${counter},$${counter+1},$${counter+2})`;
+               counter = counter+3;
+               subTasks.push(...values);
+            }
+            createSubTaskSql = createSubTaskSql + sqlValues + ' RETURNING *';
+            const newSubTask = await dbClient.query(createSubTaskSql,subTasks);
+            subTasks = newSubTask.rows;
        }
        if(task.category.length !== 0){
-           const addCategorySql = `INSERT INTO categorytotask(entry_id,category_id,task_id)`;
-           for(let category of task.category){
-                const categoryToTaskEntry = new CategoryToTask(category.categoryId,task.taskId);
-                await dbClient.query(addCategorySql,categoryToTaskEntry);
-                const fetchCategorySql = `SELECT * FROM categories WHERE category_id=$1`;
-                const categoryEntry =  await dbClient.query(fetchCategorySql,[category.categoryId]);
-                categories.push(categoryEntry.rows[0]);
-           }
-       }
+        let createCategorySql = `INSERT INTO categorytotask(entry_id,task_id,category_id) `
+        let sqlValues = ''
+        let counter = 1;
+        let categories = [];
+        for(let category of task.category){
+            category = new CategoryToTask(categorycategoryId,task.taskId);
+            const values = [category.entryId,category.taskId,category.categoryId];
+            sqlValues = sqlValues + ',' + `($${counter},$${counter+1},$${counter+2})`;
+            counter = counter+3;
+            categories.push(...values);
+         }
+         createCategorySql = createCategorySql + sqlValues + ' RETURNING *';
+         const newCategories = await dbClient.query(createCategorySql,categories);
+         categories = newCategories.rows;
+    }
+    
        const createSql = `INSERT INTO tasks(task_id,user_id,task,start_date,end_date,priority,description,status) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`;
        const values = [task.taskId,task.userId,task.taskName,task.startDate,task.endDate,task.priority,task.description,task.status];
        const createdTask = await dbClient.query(createSql,values);
@@ -39,7 +52,7 @@ const createTaskController = (req,res)=>{
    }
 }
 
-const getAllTasksByUserIdController = (req,res) =>{
+const getAllTasksByUserIdController = async (req,res) =>{
     try{
         const userId = req.jwtPayload.userId;
         const fetchTasksSql = `SELECT * FROM tasks WHERE user_id=$1`;
@@ -52,7 +65,7 @@ const getAllTasksByUserIdController = (req,res) =>{
     }
 }
 
-const updateTaskByIdController = (req,res) => {
+const updateTaskByIdController = async (req,res) => {
     try{
         const userId = req.jwtPayload.userId;
         const updates = req.body;
@@ -141,7 +154,7 @@ const getAllTaskByStatus = async (req,res) =>{
 }
 
 
-const getTaskByIdController = (req,res) =>{
+const getTaskByIdController = async (req,res) =>{
     try{
         const taskId = req.params.taskId;
         const fetchSql = `SELECT * FROM tasks WHERE task_id=$1`;
@@ -158,7 +171,7 @@ const getTaskByIdController = (req,res) =>{
     }
 }
 
-const deleteTaskByIdController = (req,res) => {
+const deleteTaskByIdController = async (req,res) => {
     try{
         const taskId = req.params.taskId;
         const deleteSql = `DELETE FROM tasks WHERE task_id=$1`;

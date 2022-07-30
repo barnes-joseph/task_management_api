@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/*.js --timeout 1000",
+    "test": "mocha test/tests/*.js --timeout 50000 --colors --diff --exit",
     "swagger-autogen": "node ./api-docs/swagger.js",
     "startDev": "nodemon app.js",
     "start": "node app.js"
@@ -19,6 +19,7 @@
     "swagger-autogen": "^2.21.5"
   },
   "dependencies": {
+    "@ngneat/falso": "^6.0.3",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "chai-http": "^4.3.0",
