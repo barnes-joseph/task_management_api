@@ -9,15 +9,18 @@ function authenticateUser(req,res,next){
        return res.status(401).json({error:"User is not authenticated"})
     }
     // verify token
+    else{
     jwt.verify(token,process.env.TOKEN_KEY,(err,user)=>{
-        if(err){
+        if(!user){
             return res.status(401).json({error:"User is not authorized"})
         }
-        console.log(user);
-        req.jwtPayload = user;
+        // console.log(user);
+        if(user){
+            req.jwtPayload = user;
+            next();
+        }
     })
-    console.log(req.jwtPayload);
-    next()
+    }
 }
 
 module.exports = {authenticateUser}

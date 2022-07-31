@@ -8,4 +8,4 @@ class SubTask{
     }
 }
 
-module.exports = SubTask;
+module.exports = {SubTask};

@@ -20,14 +20,10 @@ const createUserController = async (req,res) => {
         // hash the password with given salt
         user.password = await bcrypt.hash(user.password,salt);
         // commit user to database
-        const createSql = `INSERT INTO users(user_id,name,email,password,username,profile) VALUES($1,$2,$3,$4,$5,$6)`;
+        const createSql = `INSERT INTO users(user_id,name,email,password,username,profile) VALUES($1,$2,$3,$4,$5,$6) RETURNING user_id,name,email,username,profile`;
         const userValues = [user.userId,user.name,user.email,user.password,user.username,user.profile];
-        await dbClient.query(createSql, userValues);
-        // fetch new user
-        const fetchSql = `SELECT user_id,name,username,profile,email FROM  users WHERE user_id=$1`;
-        const user_id = [user.userId];
-        const newUser = await dbClient.query(fetchSql, user_id)
-        return res.status(201).json({ user: newUser.rows[0]});
+        const newUser = await dbClient.query(createSql, userValues);
+        return res.status(201).json({user:newUser.rows[0]});
     }catch(err){
         console.log(err);
         return res.status(500).json({error:"An error occurred in the server"});
@@ -37,7 +33,7 @@ const createUserController = async (req,res) => {
 
 const loginController = async (req,res)=>{
     const user = req.body;
-    console.log(user);
+    // console.log(user);
     // create login token
     const token = jwt.sign(
         {userId:user.user_id},
@@ -50,22 +46,22 @@ const loginController = async (req,res)=>{
 
 const getUser = async (req,res)=>{
     try{
-        const searchKey = req.params;
+        const searchKey = req.query;
         if(searchKey.email){
-            const searchSql =  `SELECT name,email,username,profile FROM users WHERE email=$1`;
+            const searchSql =  `SELECT user_id,name,email,username,profile FROM users WHERE email=$1`;
             const user = await dbClient.query(searchSql,[searchKey.email])
             if(user.rowCount===0){
                 return res.status(404).json({error:"User with given email does not exist"})
             }
-            return res.status(200).json({...user.rows[0]});       
+            return res.status(200).json({user:user.rows[0]});       
         }
         else if(searchKey.username){
-            const searchSql =  `SELECT name,email,username,profile FROM users WHERE username=$1`;
+            const searchSql =  `SELECT user_id,name,email,username,profile FROM users WHERE username=$1`;
             const user = await dbClient.query(searchSql,[searchKey.username])
             if(user.rowCount===0){
                 return res.status(404).json({error:"User with given username does not exist"})
             }
-            return res.status(200).json({...user.rows[0]});  
+            return res.status(200).json({user:user.rows[0]});  
         }
         else{
             return res.status(400).json({error:"Query must contain email or username"});
@@ -80,15 +76,16 @@ const getUser = async (req,res)=>{
 const updateUserController = async (req,res) => {
     try{
         // retrieving the user
-        const user = req.user;
-        console.log(user);
-        console.log(req.body);
+        const userId = req.jwtPayload.userId;
+        const checkSql = `SELECT * FROM users WHERE user_id=$1`;
+        const user = await dbClient.query(checkSql,[userId])
+        // console.log(req.body);
         // removing the password from the retrieved user
         delete user.password
         // updating the user details
-        const updatedData = {...user,...req.body};
+        const updatedData = {...user.rows[0],...req.body};
 
-        console.log(updatedData)
+        // console.log(updatedData)
         // check if new username or new email exists
         if(req.body.username){
             const fetchSql = `SELECT username FROM users WHERE username=$1`;
@@ -105,8 +102,8 @@ const updateUserController = async (req,res) => {
             }
         }
         // committing updates to database
-        const updateSql = `UPDATE users SET name=$1,email=$2,username=$3 RETURNING user_id,name,email,username`;
-        const values = [updatedData.name,updatedData.email,updatedData.username];
+        const updateSql = `UPDATE users SET name=$1,email=$2,username=$3 WHERE user_id=$4 RETURNING user_id,name,email,username,profile`;
+        const values = [updatedData.name,updatedData.email,updatedData.username,req.jwtPayload.userId];
         const queryRes = await dbClient.query(updateSql,values);
         return res.status(200).json({user:queryRes.rows[0]});
     }catch(err){
@@ -120,10 +117,7 @@ const changeUserPassword = async (req,res) =>{
         const userId = req.jwtPayload.userId;
         const fetchSql = `SELECT password FROM users WHERE user_id=$1`;
         const user = await dbClient.query(fetchSql,[userId]);
-        if(user.rowCount===0){
-            return res.status(404).json({error:"User does not exist"});
-        }
-        const isValid = bcrypt.compare(req.body.oldPassword,user.rows[0].password);
+        const isValid = await bcrypt.compare(req.body.oldPassword,user.rows[0].password);
         if(!isValid){
             return res.status(401).json({error:"Last Used password invalid"})
         }
@@ -145,13 +139,12 @@ const changeUserPassword = async (req,res) =>{
 const changeProfilePicture = async (req,res)=>{
     try{
     const profile = req.file.path;
-    const updateSql = `UPDATE users SET profile=$1 WHERE user_id=$2`;
+    const updateSql = `UPDATE users SET profile=$1 WHERE user_id=$2 RETURNING user_id,name,username,email,profile`;
     const values = [profile,req.jwtPayload.userId]
-    await dbClient.query(updateSql,values);
-    const fetchProfileSql = `SELECT profile FROM users WHERE user_id=$1`;
-    const newProfile = await dbClient.query(fetchProfileSql,)
-    return res.status(200).json({message:"Update successful"});
+    const updatedUser = await dbClient.query(updateSql,values);
+    return res.status(200).json({user:updatedUser.rows[0]});
     } catch(err){
+        console.log(err)
         return res.status(500).json({error:"An error occurred in the server"})
     }
 
@@ -159,11 +152,12 @@ const changeProfilePicture = async (req,res)=>{
 
 const deleteUserController = async (req,res) =>{
     try{
-        const user = req.user;
+        const checkSql = `SELECT * FROM users WHERE user_id=$1`;
+        const user = await dbClient.query(checkSql,[req.jwtPayload.userId])
         const deleteSql = `DELETE FROM users WHERE user_id=$1`;
-        const values = [user.user_id];
+        const values = [user.rows[0].user_id];
         const queryRes = await dbClient.query(deleteSql,values);
-        return res.status(201).json();
+        return res.status(200).json({message:"Delete successful"});
     }catch(err){
         return res.status(500).json({error:"An error occurred in the server"})
     }
