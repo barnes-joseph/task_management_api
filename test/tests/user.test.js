@@ -1,3 +1,4 @@
+const fs = require('fs');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../../app.js');
@@ -317,6 +318,30 @@ describe('Users',()=>{
             })
         });
 
+        it('it should not update a user with valid token and bad data format',(done)=>{
+            const user = createGoodUserData();
+            const newUsername = createUsername();
+            const newEmail = createEmail();
+            const newUser = new User(user);
+            createUser(newUser);
+            const token = userLogin(newUser);
+            const updatedUser = {...newUser,username:newUsername,email:newEmail,user_id:newUser.userId};
+            delete updatedUser.password;
+            delete updatedUser.userId;
+            chai.request(app)
+            .put('/api/taskify/users/update')
+            .set('Authorization',`Bearer ${token}`)
+            .send({})
+            .end((err,res)=>{
+                res.should.have.status(400);
+                res.body.should.be.an('object');
+                res.body.should.have.property('error');
+                res.body.error.should.be.eql('Request body is empty');
+                done();
+            })
+        });
+
+
         it('it should not update a user with valid token and email that already exists',(done)=>{
             const user1 = createGoodUserData();
             const user2 = createRandomUser();
@@ -403,7 +428,7 @@ describe('Users',()=>{
     });
 
     describe('Change User Password Route',()=>{
-       it('it should allow an authenticated user to change a password with valid previous password',(done)=>{
+       it('it should allow an authenticated user to change a password with valid previous password and good data format',(done)=>{
         const user = createGoodUserData();
         const newUser = new User(user);
         const newPassword = createPassword();
@@ -418,6 +443,25 @@ describe('Users',()=>{
             res.body.should.be.an('object');
             res.body.should.have.property('message');
             res.body.message.should.be.eql('Update successfully');
+            done();
+        })
+       });
+
+       it('it should not allow an authenticated user to change a password with bad data format',(done)=>{
+        const user = createGoodUserData();
+        const newUser = new User(user);
+        const newPassword = createPassword();
+        createUser(newUser);
+        const token = userLogin(newUser);
+        chai.request(app)
+        .put('/api/taskify/users/change_password')
+        .set('Authorization',`Bearer ${token}`)
+        .send({newPassword})
+        .end((err,res)=>{
+            res.should.have.status(400);
+            res.body.should.be.an('object');
+            res.body.should.have.property('error');
+            res.body.error.should.be.eql('Bad Data Format for password change');
             done();
         })
        });
@@ -500,6 +544,7 @@ describe('Users',()=>{
                 res.body.should.be.an('object');
                 res.body.should.have.property('user');
                 res.body.user.should.be.eql({...updatedUser,user_id:newUser.userId,profile:`assets/profiles/profile--${newUser.userId}--test-image.png`});
+                fs.unlinkSync(`assets/profiles/profile--${newUser.userId}--test-image.png`);
                 done();
             })
         });
@@ -539,6 +584,58 @@ describe('Users',()=>{
             .end((err,res)=>{
                 res.should.have.status(401);
                 res.body.should.be.an('object');
+                res.body.should.have.property('error');
+                res.body.error.should.be.eql('User is not authorized');
+                done();
+            })
+        });
+    })
+
+    describe('Delete User Route',()=>{
+        it('it should an authenticated user to delete his/her account',(done)=>{
+            const user = createGoodUserData();
+            const newUser = new User(user);
+            createUser(newUser);
+            const token = userLogin(newUser);
+            chai.request(app)
+            .delete('/api/taskify/users/delete')
+            .set('Authorization',`Bearer ${token}`)
+            .end((err,res)=>{
+                res.should.have.status(200);
+                res.body.should.be.an('object');
+                res.body.should.have.property('message');
+                res.body.message.should.be.eql('Delete User successful');
+                done();
+            })
+        });
+
+        it('it should not allow an unauthenticated user to delete his/her account',(done)=>{
+            const user = createGoodUserData();
+            const newUser = new User(user);
+            createUser(newUser);
+            chai.request(app)
+            .delete('/api/taskify/users/delete')
+            .end((err,res)=>{
+                res.should.have.status(401);
+                res.body.should.be.an('object')
+                res.body.should.have.property('error');
+                res.body.error.should.be.eql('User is not authenticated');
+                done();
+            })
+        });
+
+        it('it should not allow a user with an invalid to delete his/her account',(done)=>{
+            const user = createGoodUserData();
+            const newUser = new User(user);
+            createUser(newUser);
+            const token = userLogin(newUser);
+            const invalidToken = token.slice(0,-3);
+            chai.request(app)
+            .delete('/api/taskify/users/delete')
+            .set('Authorization',`Bearer ${invalidToken}`)
+            .end((err,res)=>{
+                res.should.have.status(401);
+                res.body.should.be.an('object')
                 res.body.should.have.property('error');
                 res.body.error.should.be.eql('User is not authorized');
                 done();

@@ -1,7 +1,7 @@
 const {createUserController, loginController, updateUserController, deleteUserController, getUser, changeUserPassword, changeProfilePicture} = require('../controllers/userControllers');
 const { authenticateUser } = require('../middlewares/authenticateMiddleware');
 const userRouter = require('express').Router();
-const {checkCreateUserRequest,checkUsernameExists, isValidUser, checkUserExists} = require('../middlewares/userMiddlewares')
+const {checkCreateUserRequest,checkUsernameExists, isValidUser, checkUserExists, checkPasswordUpdateDataFormat, checkUpdateUserDataFormat} = require('../middlewares/userMiddlewares')
 
 const multer = require('multer');
 const fileStorageEngine = multer.diskStorage({
@@ -18,10 +18,10 @@ const upload = multer({storage:fileStorageEngine});
 userRouter.get('/',getUser);
 userRouter.post('/',checkCreateUserRequest,checkUsernameExists,createUserController);
 userRouter.post('/login',isValidUser,loginController);
-userRouter.put('/update',authenticateUser,updateUserController);
-userRouter.delete('/delete',authenticateUser,deleteUserController);
-userRouter.put('/change_password',authenticateUser,changeUserPassword)
+userRouter.put('/update',authenticateUser,checkUpdateUserDataFormat,updateUserController);
+userRouter.put('/change_password',authenticateUser,checkPasswordUpdateDataFormat,changeUserPassword)
 userRouter.put('/update_profile',authenticateUser,upload.single('profile'),changeProfilePicture)
+userRouter.delete('/delete',authenticateUser,deleteUserController);
 
 
 

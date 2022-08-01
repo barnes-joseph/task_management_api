@@ -1,0 +1,2 @@
+app.js:const swaggerFile = require('./api-docs/swagger_output.json');
+package.json:    "swagger-autogen": "node ./api-docs/swagger.js",

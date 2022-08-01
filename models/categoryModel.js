@@ -1,12 +1,12 @@
 const {v4:uuidv4} = require('uuid');
 
 class Category{
-    constructor(name,userId){
+    constructor(category,userId){
         this.categoryId = uuidv4();
         this.userId = userId;
-        this.name = name;
-        this.categoryAvatar = '';
+        this.name = category.name;
+        this.emoji = category.emoji || '';
     }
 }
 
-module.exports = Category;
+module.exports = {Category};

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/tests/*.js --timeout 50000 --colors --diff --exit",
+    "test": "mocha test/tests/user.test.js --timeout 50000 --colors --diff --exit",
+    "test-with-coverage": "nyc --reporter=text --report-dir=./test/coverage mocha test/tests/*.js --timeout 50000 --colors --diff --exit",
     "swagger-autogen": "node ./api-docs/swagger.js",
     "startDev": "nodemon app.js",
     "start": "node app.js"
@@ -16,6 +17,7 @@
     "chai": "^4.3.6",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.19",
+    "nyc": "^15.1.0",
     "swagger-autogen": "^2.21.5"
   },
   "dependencies": {
