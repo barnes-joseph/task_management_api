@@ -7,14 +7,14 @@ const createCategoryController = async (req,res)=>{
         const category = new Category(req.body.category,req.jwtPayload.userId);
         // check if category exists by name and user_id
         const fetchSql = `SELECT * FROM categories WHERE name=$1 AND user_id=$2`;
-        const queryRes = await dbClient.query(fetchSql,[category.categoryId,category.userId])
+        const queryRes = await dbClient.query(fetchSql,[category.name,category.userId])
         if(queryRes.rowCount===1){
             return res.status(409).json({error:"Category already exists"});
         }
         else{
             // commit category to database
-            const createSql = `INSERT INTO categories(category_id,name,emoji) VALUES ($1,$2,$3) RETURNING *`;
-            const values = [category.categoryId,category.name.category.categoryAvatar];
+            const createSql = `INSERT INTO categories(user_id,category_id,name,emoji) VALUES ($1,$2,$3,$4) RETURNING *`;
+            const values = [category.userId,category.categoryId,category.name,category.emoji];
             const newCategory = await dbClient.query(createSql,values);
             // return new category
             return res.status(201).json({category:newCategory.rows[0]})
@@ -73,7 +73,7 @@ const deleteCategoryByIdController = async (req,res) =>{
         const categoryId = req.params.categoryId;
         const deleteSql = `DELETE FROM categories WHERE category_id=$1`;
         await dbClient.query(deleteSql,[categoryId]);
-        return res.status(200).json({message:"Delete successful"})
+        return res.status(200).json({message:"Delete category successful"})
     }catch(err){
         console.log(err);
         return res.status(500).json({error:"An error occurred in the server"})

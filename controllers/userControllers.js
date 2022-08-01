@@ -157,7 +157,7 @@ const deleteUserController = async (req,res) =>{
         const deleteSql = `DELETE FROM users WHERE user_id=$1`;
         const values = [user.rows[0].user_id];
         const queryRes = await dbClient.query(deleteSql,values);
-        return res.status(200).json({message:"Delete successful"});
+        return res.status(200).json({message:"Delete User successful"});
     }catch(err){
         return res.status(500).json({error:"An error occurred in the server"})
     }

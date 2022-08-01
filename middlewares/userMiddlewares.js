@@ -31,16 +31,16 @@ async function checkUsernameExists(req,res,next){
     }
 }
 
-async function checkUserExists(req,res,next){
-    // check user exists
-    const checkSql = `SELECT * FROM users WHERE user_id=$1`;
-    const queryRes = await dbClient.query(checkSql,[req.jwtPayload.userId]);
-    if(queryRes.rowCount===0){
-        return res.status(404).json({error:"User not found"});
-    }
-    req.user = queryRes.rows[0];
-    next();
-}
+// async function checkUserExists(req,res,next){
+//     // check user exists
+//     const checkSql = `SELECT * FROM users WHERE user_id=$1`;
+//     const queryRes = await dbClient.query(checkSql,[req.jwtPayload.userId]);
+//     if(queryRes.rowCount===0){
+//         return res.status(404).json({error:"User not found"});
+//     }
+//     req.user = queryRes.rows[0];
+//     next();
+// }
 
 async function isValidUser(req,res,next){
     try{
@@ -91,5 +91,21 @@ async function isValidUser(req,res,next){
     }
 }
 
+const checkPasswordUpdateDataFormat = (req,res,next) => {
+    const data = req.body;
+    if(!(data.oldPassword && data.newPassword)){
+        return res.status(400).json({error:"Bad Data Format for password change"});
+    }
+    next();
+}
 
-module.exports = {checkCreateUserRequest,checkUsernameExists,isValidUser,checkUserExists};
+const checkUpdateUserDataFormat = (req,res,next)=>{
+    const data = req.body;
+    if(!data.username || !data.email){
+        return res.status(400).json({error:"Request body is empty"})
+    }
+    next();
+}
+
+
+module.exports = {checkCreateUserRequest,checkUsernameExists,isValidUser,checkPasswordUpdateDataFormat,checkUpdateUserDataFormat};
