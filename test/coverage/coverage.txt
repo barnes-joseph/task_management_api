@@ -1,2 +1,191 @@
-app.js:const swaggerFile = require('./api-docs/swagger_output.json');
-package.json:    "swagger-autogen": "node ./api-docs/swagger.js",
+
+> task-management-application@1.0.0 test-with-coverage
+> nyc --reporter=text mocha test/tests/*.js --timeout 50000 --exit
+
+Server started on port 8081
+
+
+  Categories
+    Create Category Route
+      ✔ it should allow an authenticated user to create a category (14881ms)
+      ✔ it should not allow an authenticated user to create a category whose name exists (3439ms)
+      ✔ it should not allow an unauthenticated user to create a category (111ms)
+      ✔ it should not allow a user with an invalid token to create a category (107ms)
+      ✔ it should not allow a user with a token to create a category without a category name (108ms)
+    Get All Categories Route
+      ✔ it should allow an authenticated user to get all categories (10116ms)
+      ✔ it should not allow an unauthenticated user to get all categories (111ms)
+      ✔ it should not allow a user with an to get all categories (107ms)
+    Get Category By Name Route
+      ✔ it should allow an authenticated user to get a category by name (8995ms)
+      ✔ it should not allow an authenticated user to get a category that does not exist (2660ms)
+      ✔ it should not allow an unauthenticated user to get a category (107ms)
+      ✔ it should not allow a user with an invalid token to get a category (107ms)
+    Update Categories Route
+      ✔ it should allow an authenticated user to update a category (5111ms)
+      ✔ it should not allow an authenticated user to update a category which does not exist (3068ms)
+      ✔ it should not allow an unauthenticated user to update a category (106ms)
+      ✔ it should not allow a user with an invalid token to update a category (110ms)
+    Delete Categories Route
+      ✔ it should allow an authenticated user to delete a category (8384ms)
+      ✔ it should not allow an authenticated user to delete a category which does not exist (5933ms)
+      ✔ it should not allow an unauthenticated user to delete a category (110ms)
+      ✔ it should not allow a user with an invalid token to delete a category (106ms)
+
+  SubTasks
+    Create SubTask
+      ✔ it should allow an authenticated user to create a subtask of a task (7770ms)
+      ✔ it should not allow an authenticated user to create a subtask of a task which does not exist (1860ms)
+      ✔ it should not allow an unauthenticated user to create a subtask of a task (108ms)
+      ✔ it should not allow a user with an invalid token to create a subtask of a task (108ms)
+    Get SubTasks By Task Id
+      ✔ it should allow an authenticated user to retrieve all subtasks of a given task (12049ms)
+      ✔ it should not allow an authenticated user to retrieve all subtasks of a given task which does not exist (1640ms)
+      ✔ it should not allow an unauthenticated user to retrieve all subtasks of a given task (113ms)
+      ✔ it should not allow a user with an invalid token to retrieve all subtasks of a given task (108ms)
+    Update SubTask
+      ✔ it should allow an authenticated user to update a subtask (20868ms)
+      ✔ it should not allow an authenticated user to update a subtask which does not exist (3480ms)
+      ✔ it should not allow an unauthenticated user to update a subtask (111ms)
+      ✔ it should not allow a user with an invalid token to update a subtask (109ms)
+    Delete SubTask
+      ✔ it should allow an authenticated user to delete a subtask (11470ms)
+      ✔ it should not allow an authenticated user to delete a subtask which does not exist (4080ms)
+      ✔ it should allow an unauthenticated user to delete a subtask (115ms)
+      ✔ it should allow a user with an invalid token to delete a subtask (107ms)
+
+  Tasks
+    Create Task Route
+      ✔ it should allow an authenticated user to create a simple task (12678ms)
+      ✔ it should allow an authenticated user to create a task with all options (5321ms)
+      ✔ it should not allow an authenticated user to create a task without a name (108ms)
+      ✔ it should not allow an unauthenticated user to create a task (106ms)
+      ✔ it should not allow a user with an invalid token to create a task (107ms)
+    Get Tasks Route
+      ✔ it should allow an authenticated user to retrieve all tasks (7253ms)
+      ✔ it should not allow a user with invalid token to retrieve all tasks (114ms)
+      ✔ it should not allow an unauthenticated user to retrieve all tasks (107ms)
+    Get Single Task Route
+      ✔ it should allow an authenticated user to retrieve a single task (11044ms)
+      ✔ it should not allow an authenticated user to retrieve a single task which does not exist (1637ms)
+      ✔ it should not allow an unauthenticated user to retrieve a single task (114ms)
+      ✔ it should not allow a user with an invalid token to retrieve a single task (107ms)
+    Get Tasks By Status
+      ✔ it should allow an authenticated user to retrieve all tasks by status (8124ms)
+      ✔ it should not allow an unauthenticated user to retrieve all tasks by status (120ms)
+      ✔ it should allow a user with an invalid token to retrieve all tasks (107ms)
+    Get Tasks By Priority
+      ✔ it should allow an authenticated user to retrieve all tasks by priority (10262ms)
+      ✔ it should not allow an unauthenticated user to retrieve all tasks by priority (106ms)
+      ✔ it should allow a user with an invalid token to retrieve all tasks (105ms)
+    Get Tasks By Date
+      ✔ it should allow an authenticated user to retrieve all tasks by start date (10638ms)
+      ✔ it should allow an authenticated user to retrieve all tasks by end date (4097ms)
+      ✔ it should not allow a user with an invalid token to retrieve all tasks by date (111ms)
+      ✔ it should not allow an unauthenticated user to retrieve all tasks by date (105ms)
+    Get Tasks By Category
+      ✔ it should allow an authenticated user to retrieve tasks by category (15549ms)
+      ✔ it should not allow a user with an invalidToken to retrieve tasks by category (112ms)
+      ✔ it should not allow an unauthenticated user to retrieve tasks by category (106ms)
+    Update Task
+      ✔ it should allow an authenticated user to update a task (19034ms)
+      ✔ it should not allow an authenticated user to update a task which does not exist (2249ms)
+      ✔ it should not allow an unauthenticated user to update a task (111ms)
+      ✔ it should not allow a user with an invalid token to update a task (106ms)
+    Delete Task Route
+      ✔ it should allow an authenticated user to delete a task (10634ms)
+      ✔ it should not allow an unauthenticated user to delete a task (112ms)
+      ✔ it should not allow a user with an invalid token to delete a task (106ms)
+
+  Users
+    Create User Route
+      ✔ it should create a new user (8390ms)
+      ✔ it should not create a user with bad data format
+      ✔ it should not create a user whose username exists (2240ms)
+      ✔ it should not create a user which exists (2662ms)
+    Get User Route
+      1) it should get a user from the database with given email
+      2) it should get a user from the database with given username
+      ✔ it should not get a user from the database with given email (31568ms)
+      ✔ it should not get a user from the database with given username (1531ms)
+      ✔ it should not get a user from the database without query parameter of username or email (110ms)
+    Login User Router
+      ✔ it should log a user with a valid email and password into the application (44441ms)
+      ✔ it should log a user with a valid username and password into the application (1836ms)
+      ✔ it should not log a user with an invalid email and password into the application (5221ms)
+      ✔ it should not log a user with an invalid username and password into the application (18840ms)
+      ✔ it should not log a user with an valid email and invalid password into the application (23656ms)
+      ✔ it should not log a user with an valid username and invalid password into the application (4505ms)
+    Update User Route
+      ✔ it should update a user with valid token and good data format (8395ms)
+      ✔ it should not update a user with valid token and bad data format (112ms)
+      ✔ it should not update a user with valid token and email that already exists (10228ms)
+      ✔ it should not update a user with valid token and username that already exists (2461ms)
+      ✔ it should not update a user without a token (111ms)
+      ✔ it should not update a user with an invalid token (105ms)
+    Change User Password Route
+      ✔ it should allow an authenticated user to change a password with valid previous password and good data format (4293ms)
+      ✔ it should not allow an authenticated user to change a password with bad data format (112ms)
+      ✔ it should not allow an authenticated user to change a password with invalid previous password (2853ms)
+      ✔ it should not allow a user without a token to change a password (106ms)
+      ✔ it should not allow a user with an invalid token to change a password (105ms)
+    Change User Profile Picture Route
+      ✔ it should allow an authenticated user to change his/her profile (4915ms)
+      ✔ it should not allow a user without a token to change his/her profile (108ms)
+      ✔ it should not allow a user with an invalid token to change his/her profile (107ms)
+    Delete User Route
+      ✔ it should an authenticated user to delete his/her account (6224ms)
+      ✔ it should not allow an unauthenticated user to delete his/her account (108ms)
+      ✔ it should not allow a user with an invalid to delete his/her account (107ms)
+
+
+  98 passing (9m)
+  2 failing
+
+  1) Users
+       Get User Route
+         it should get a user from the database with given email:
+     Error: Timeout of 50000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/shikamaru/Documents/Projects/Task Management Application/test/tests/user.test.js)
+      at listOnTimeout (node:internal/timers:564:17)
+      at process.processTimers (node:internal/timers:507:7)
+
+  2) Users
+       Get User Route
+         it should get a user from the database with given username:
+     Error: Timeout of 50000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/shikamaru/Documents/Projects/Task Management Application/test/tests/user.test.js)
+      at listOnTimeout (node:internal/timers:564:17)
+      at process.processTimers (node:internal/timers:507:7)
+
+
+
+---------------------------------------|---------|----------|---------|---------|-------------------
+File                                   | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+---------------------------------------|---------|----------|---------|---------|-------------------
+All files                              |   89.39 |    87.69 |     100 |   89.39 |                   
+ Task Management Application           |     100 |      100 |     100 |     100 |                   
+  app.js                               |     100 |      100 |     100 |     100 |                   
+ ...Management Application/controllers |   85.84 |    89.13 |     100 |   85.84 |                   
+  categoryControllers.js               |   81.13 |      100 |     100 |   81.13 | ...55,66-67,78-79 
+  subTaskControllers.js                |   83.92 |     87.5 |     100 |   83.92 | ...57-58,69,75-76 
+  taskControllers.js                   |   86.15 |    85.71 |     100 |   86.15 | ...63-164,175-176 
+  userControllers.js                   |      89 |       90 |     100 |      89 | ...35,147-148,162 
+ Task Management Application/database  |   79.48 |    72.72 |     100 |   79.48 |                   
+  createDatabase.js                    |   78.12 |       75 |     100 |   78.12 | ...30,45,59,79,94 
+  dbConnection.js                      |   85.71 |       50 |     100 |   85.71 | 13                
+ ...Management Application/middlewares |    93.9 |    93.47 |     100 |    93.9 |                   
+  authenticateMiddleware.js            |     100 |     87.5 |     100 |     100 | 18                
+  categoryMiddlewares.js               |     100 |      100 |     100 |     100 |                   
+  taskMiddleware.js                    |     100 |      100 |     100 |     100 |                   
+  userMiddlewares.js                   |      90 |    93.75 |     100 |      90 | 29-30,41,76-77    
+ Task Management Application/models    |     100 |    85.71 |     100 |     100 |                   
+  categoryModel.js                     |     100 |       50 |     100 |     100 | 8                 
+  categoryToTaskModel.js               |     100 |      100 |     100 |     100 |                   
+  subTaskModel.js                      |     100 |      100 |     100 |     100 |                   
+  taskModel.js                         |     100 |    91.66 |     100 |     100 | 24                
+  userModel.js                         |     100 |      100 |     100 |     100 |                   
+ Task Management Application/routers   |     100 |      100 |     100 |     100 |                   
+  categoryRouter.js                    |     100 |      100 |     100 |     100 |                   
+  subTaskRouter.js                     |     100 |      100 |     100 |     100 |                   
+  taskRouter.js                        |     100 |      100 |     100 |     100 |                   
+  userRouter.js                        |     100 |      100 |     100 |     100 |                   
+---------------------------------------|---------|----------|---------|---------|-------------------

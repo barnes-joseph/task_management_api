@@ -1,5 +1,5 @@
 const dbClient = require('../database/dbConnection');
-const SubTask = require('../models/subTaskModel');
+const {SubTask} = require('../models/subTaskModel');
 
 const createSubTaskController = async (req,res) =>{
     try{
@@ -14,7 +14,7 @@ const createSubTaskController = async (req,res) =>{
         const createdSubTasks = [];
         const createSubTaskSql = `INSERT INTO subtasks(subtask_id,name,task_id) VALUES($1,$2,$3)`;
         for(let subtask of subTasks){
-            const subTask = new SubTask(req.body.subtask,task_id);
+            const subTask = new SubTask(subtask,taskId);
             const newSubTask = await dbClient.query(createSubTaskSql,[subTask.subTaskId,subTask.name,subTask.parentId]);
             createdSubTasks.push(newSubTask.rows[0]);
         }

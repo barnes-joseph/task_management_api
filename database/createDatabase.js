@@ -65,11 +65,11 @@ async function createTaskTable(){
         "task_id" UUID NOT NULL PRIMARY KEY,
         "user_id" UUID NOT NULL,
         "task" TEXT NOT NULL,
-        "start_date" DATE,
-        "end_date" DATE CHECK (end_date > start_date),
+        "start_date" TIMESTAMP WITH TIME ZONE,
+        "end_date" TIMESTAMP WITH TIME ZONE CHECK (end_date > start_date),
         "priority" INT CHECK (priority < 4 AND priority > 0 ),
         "description" TEXT,
-        "created" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        "created" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         "status" INT CHECK (status > 0 AND status < 4),
         CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(user_id)
         )`
