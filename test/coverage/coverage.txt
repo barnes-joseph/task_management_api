@@ -7,139 +7,156 @@ Server started on port 8081
 
   Categories
     Create Category Route
-      ✔ it should allow an authenticated user to create a category (11946ms)
-      ✔ it should not allow an authenticated user to create a category whose name exists (1894ms)
-      ✔ it should not allow an unauthenticated user to create a category (108ms)
-      ✔ it should not allow a user with an invalid token to create a category (109ms)
+      ✔ it should allow an authenticated user to create a category (14881ms)
+      ✔ it should not allow an authenticated user to create a category whose name exists (3439ms)
+      ✔ it should not allow an unauthenticated user to create a category (111ms)
+      ✔ it should not allow a user with an invalid token to create a category (107ms)
       ✔ it should not allow a user with a token to create a category without a category name (108ms)
     Get All Categories Route
-      ✔ it should allow an authenticated user to get all categories (6431ms)
-      ✔ it should not allow an unauthenticated user to get all categories (108ms)
+      ✔ it should allow an authenticated user to get all categories (10116ms)
+      ✔ it should not allow an unauthenticated user to get all categories (111ms)
       ✔ it should not allow a user with an to get all categories (107ms)
     Get Category By Name Route
-      ✔ it should allow an authenticated user to get a category by name (5312ms)
-      ✔ it should not allow an authenticated user to get a category that does not exist (2246ms)
-      ✔ it should not allow an unauthenticated user to get a category (111ms)
+      ✔ it should allow an authenticated user to get a category by name (8995ms)
+      ✔ it should not allow an authenticated user to get a category that does not exist (2660ms)
+      ✔ it should not allow an unauthenticated user to get a category (107ms)
       ✔ it should not allow a user with an invalid token to get a category (107ms)
     Update Categories Route
-      ✔ it should allow an authenticated user to update a category (5108ms)
-      ✔ it should not allow an authenticated user to update a category which does not exist (1842ms)
-      ✔ it should not allow an unauthenticated user to update a category (107ms)
-      ✔ it should not allow a user with an invalid token to update a category (106ms)
+      ✔ it should allow an authenticated user to update a category (5111ms)
+      ✔ it should not allow an authenticated user to update a category which does not exist (3068ms)
+      ✔ it should not allow an unauthenticated user to update a category (106ms)
+      ✔ it should not allow a user with an invalid token to update a category (110ms)
     Delete Categories Route
-      ✔ it should allow an authenticated user to delete a category (9005ms)
-      ✔ it should not allow an authenticated user to delete a category which does not exist (1628ms)
-      ✔ it should not allow an unauthenticated user to delete a category (112ms)
+      ✔ it should allow an authenticated user to delete a category (8384ms)
+      ✔ it should not allow an authenticated user to delete a category which does not exist (5933ms)
+      ✔ it should not allow an unauthenticated user to delete a category (110ms)
       ✔ it should not allow a user with an invalid token to delete a category (106ms)
 
   SubTasks
     Create SubTask
-      ✔ it should allow an authenticated user to create a subtask of a task (7971ms)
-      ✔ it should not allow an authenticated user to create a subtask of a task which does not exist (1838ms)
-      ✔ it should not allow an unauthenticated user to create a subtask of a task (115ms)
+      ✔ it should allow an authenticated user to create a subtask of a task (7770ms)
+      ✔ it should not allow an authenticated user to create a subtask of a task which does not exist (1860ms)
+      ✔ it should not allow an unauthenticated user to create a subtask of a task (108ms)
       ✔ it should not allow a user with an invalid token to create a subtask of a task (108ms)
     Get SubTasks By Task Id
-      ✔ it should allow an authenticated user to retrieve all subtasks of a given task (11242ms)
-      ✔ it should not allow an authenticated user to retrieve all subtasks of a given task which does not exist (1839ms)
+      ✔ it should allow an authenticated user to retrieve all subtasks of a given task (12049ms)
+      ✔ it should not allow an authenticated user to retrieve all subtasks of a given task which does not exist (1640ms)
       ✔ it should not allow an unauthenticated user to retrieve all subtasks of a given task (113ms)
-      ✔ it should not allow a user with an invalid token to retrieve all subtasks of a given task (107ms)
+      ✔ it should not allow a user with an invalid token to retrieve all subtasks of a given task (108ms)
     Update SubTask
-      ✔ it should allow an authenticated user to update a subtask (13298ms)
-      ✔ it should not allow an authenticated user to update a subtask which does not exist (3276ms)
-      ✔ it should not allow an unauthenticated user to update a subtask (107ms)
-      ✔ it should not allow a user with an invalid token to update a subtask (107ms)
+      ✔ it should allow an authenticated user to update a subtask (20868ms)
+      ✔ it should not allow an authenticated user to update a subtask which does not exist (3480ms)
+      ✔ it should not allow an unauthenticated user to update a subtask (111ms)
+      ✔ it should not allow a user with an invalid token to update a subtask (109ms)
     Delete SubTask
-      ✔ it should allow an authenticated user to delete a subtask (13713ms)
-      ✔ it should not allow an authenticated user to delete a subtask which does not exist (3073ms)
-      ✔ it should allow an unauthenticated user to delete a subtask (106ms)
-      ✔ it should allow a user with an invalid token to delete a subtask (106ms)
+      ✔ it should allow an authenticated user to delete a subtask (11470ms)
+      ✔ it should not allow an authenticated user to delete a subtask which does not exist (4080ms)
+      ✔ it should allow an unauthenticated user to delete a subtask (115ms)
+      ✔ it should allow a user with an invalid token to delete a subtask (107ms)
 
   Tasks
     Create Task Route
-      ✔ it should allow an authenticated user to create a simple task (8998ms)
-      ✔ it should allow an authenticated user to create a task with all options (3274ms)
-      ✔ it should not allow an authenticated user to create a task without a name (125ms)
-      ✔ it should not allow an unauthenticated user to create a task (107ms)
-      ✔ it should not allow a user with an invalid token to create a task (116ms)
+      ✔ it should allow an authenticated user to create a simple task (12678ms)
+      ✔ it should allow an authenticated user to create a task with all options (5321ms)
+      ✔ it should not allow an authenticated user to create a task without a name (108ms)
+      ✔ it should not allow an unauthenticated user to create a task (106ms)
+      ✔ it should not allow a user with an invalid token to create a task (107ms)
     Get Tasks Route
-      ✔ it should allow an authenticated user to retrieve all tasks (7634ms)
-      ✔ it should not allow a user with invalid token to retrieve all tasks (124ms)
-      ✔ it should not allow an unauthenticated user to retrieve all tasks (110ms)
+      ✔ it should allow an authenticated user to retrieve all tasks (7253ms)
+      ✔ it should not allow a user with invalid token to retrieve all tasks (114ms)
+      ✔ it should not allow an unauthenticated user to retrieve all tasks (107ms)
     Get Single Task Route
-      ✔ it should allow an authenticated user to retrieve a single task (9183ms)
-      ✔ it should not allow an authenticated user to retrieve a single task which does not exist (1439ms)
-      ✔ it should not allow an unauthenticated user to retrieve a single task (113ms)
+      ✔ it should allow an authenticated user to retrieve a single task (11044ms)
+      ✔ it should not allow an authenticated user to retrieve a single task which does not exist (1637ms)
+      ✔ it should not allow an unauthenticated user to retrieve a single task (114ms)
       ✔ it should not allow a user with an invalid token to retrieve a single task (107ms)
     Get Tasks By Status
-      ✔ it should allow an authenticated user to retrieve all tasks by status (5301ms)
-      ✔ it should not allow an unauthenticated user to retrieve all tasks by status (111ms)
-      ✔ it should allow a user with an invalid token to retrieve all tasks (105ms)
-    Get Tasks By Priority
-      ✔ it should allow an authenticated user to retrieve all tasks by priority (7153ms)
-      ✔ it should not allow an unauthenticated user to retrieve all tasks by priority (106ms)
+      ✔ it should allow an authenticated user to retrieve all tasks by status (8124ms)
+      ✔ it should not allow an unauthenticated user to retrieve all tasks by status (120ms)
       ✔ it should allow a user with an invalid token to retrieve all tasks (107ms)
+    Get Tasks By Priority
+      ✔ it should allow an authenticated user to retrieve all tasks by priority (10262ms)
+      ✔ it should not allow an unauthenticated user to retrieve all tasks by priority (106ms)
+      ✔ it should allow a user with an invalid token to retrieve all tasks (105ms)
     Get Tasks By Date
-      ✔ it should allow an authenticated user to retrieve all tasks by start date (12482ms)
-      ✔ it should allow an authenticated user to retrieve all tasks by end date (6552ms)
-      ✔ it should not allow a user with an invalid token to retrieve all tasks by date (108ms)
+      ✔ it should allow an authenticated user to retrieve all tasks by start date (10638ms)
+      ✔ it should allow an authenticated user to retrieve all tasks by end date (4097ms)
+      ✔ it should not allow a user with an invalid token to retrieve all tasks by date (111ms)
       ✔ it should not allow an unauthenticated user to retrieve all tasks by date (105ms)
     Get Tasks By Category
-      ✔ it should allow an authenticated user to retrieve tasks by category (12277ms)
-      ✔ it should not allow a user with an invalidToken to retrieve tasks by category (108ms)
-      ✔ it should not allow an unauthenticated user to retrieve tasks by category (105ms)
+      ✔ it should allow an authenticated user to retrieve tasks by category (15549ms)
+      ✔ it should not allow a user with an invalidToken to retrieve tasks by category (112ms)
+      ✔ it should not allow an unauthenticated user to retrieve tasks by category (106ms)
     Update Task
-      ✔ it should allow an authenticated user to update a task (11290ms)
-      ✔ it should not allow an authenticated user to update a task which does not exist (2218ms)
+      ✔ it should allow an authenticated user to update a task (19034ms)
+      ✔ it should not allow an authenticated user to update a task which does not exist (2249ms)
       ✔ it should not allow an unauthenticated user to update a task (111ms)
       ✔ it should not allow a user with an invalid token to update a task (106ms)
     Delete Task Route
-      ✔ it should allow an authenticated user to delete a task (9612ms)
-      ✔ it should not allow an unauthenticated user to delete a task (106ms)
-      ✔ it should not allow a user with an invalid token to delete a task (107ms)
+      ✔ it should allow an authenticated user to delete a task (10634ms)
+      ✔ it should not allow an unauthenticated user to delete a task (112ms)
+      ✔ it should not allow a user with an invalid token to delete a task (106ms)
 
   Users
     Create User Route
-      ✔ it should create a new user (7358ms)
+      ✔ it should create a new user (8390ms)
       ✔ it should not create a user with bad data format
-      ✔ it should not create a user whose username exists (2043ms)
-      ✔ it should not create a user which exists (1842ms)
+      ✔ it should not create a user whose username exists (2240ms)
+      ✔ it should not create a user which exists (2662ms)
     Get User Route
-      ✔ it should get a user from the database with given email (1636ms)
-      ✔ it should get a user from the database with given username (1639ms)
-      ✔ it should not get a user from the database with given email (1251ms)
-      ✔ it should not get a user from the database with given username (1412ms)
-      ✔ it should not get a user from the database without query parameter of username or email (106ms)
+      1) it should get a user from the database with given email
+      2) it should get a user from the database with given username
+      ✔ it should not get a user from the database with given email (31568ms)
+      ✔ it should not get a user from the database with given username (1531ms)
+      ✔ it should not get a user from the database without query parameter of username or email (110ms)
     Login User Router
-      ✔ it should log a user with a valid email and password into the application (3892ms)
-      ✔ it should log a user with a valid username and password into the application (1629ms)
-      ✔ it should not log a user with an invalid email and password into the application (1335ms)
-      ✔ it should not log a user with an invalid username and password into the application (2657ms)
-      ✔ it should not log a user with an valid email and invalid password into the application (2969ms)
-      ✔ it should not log a user with an valid username and invalid password into the application (2464ms)
+      ✔ it should log a user with a valid email and password into the application (44441ms)
+      ✔ it should log a user with a valid username and password into the application (1836ms)
+      ✔ it should not log a user with an invalid email and password into the application (5221ms)
+      ✔ it should not log a user with an invalid username and password into the application (18840ms)
+      ✔ it should not log a user with an valid email and invalid password into the application (23656ms)
+      ✔ it should not log a user with an valid username and invalid password into the application (4505ms)
     Update User Route
-      ✔ it should update a user with valid token and good data format (7060ms)
-      ✔ it should not update a user with valid token and bad data format (108ms)
-      ✔ it should not update a user with valid token and email that already exists (6650ms)
-      ✔ it should not update a user with valid token and username that already exists (3481ms)
-      ✔ it should not update a user without a token (106ms)
-      ✔ it should not update a user with an invalid token (107ms)
+      ✔ it should update a user with valid token and good data format (8395ms)
+      ✔ it should not update a user with valid token and bad data format (112ms)
+      ✔ it should not update a user with valid token and email that already exists (10228ms)
+      ✔ it should not update a user with valid token and username that already exists (2461ms)
+      ✔ it should not update a user without a token (111ms)
+      ✔ it should not update a user with an invalid token (105ms)
     Change User Password Route
-      ✔ it should allow an authenticated user to change a password with valid previous password and good data format (9208ms)
-      ✔ it should not allow an authenticated user to change a password with bad data format (108ms)
-      ✔ it should not allow an authenticated user to change a password with invalid previous password (5521ms)
-      ✔ it should not allow a user without a token to change a password (105ms)
+      ✔ it should allow an authenticated user to change a password with valid previous password and good data format (4293ms)
+      ✔ it should not allow an authenticated user to change a password with bad data format (112ms)
+      ✔ it should not allow an authenticated user to change a password with invalid previous password (2853ms)
+      ✔ it should not allow a user without a token to change a password (106ms)
       ✔ it should not allow a user with an invalid token to change a password (105ms)
     Change User Profile Picture Route
-      ✔ it should allow an authenticated user to change his/her profile (7058ms)
+      ✔ it should allow an authenticated user to change his/her profile (4915ms)
       ✔ it should not allow a user without a token to change his/her profile (108ms)
-      ✔ it should not allow a user with an invalid token to change his/her profile (118ms)
+      ✔ it should not allow a user with an invalid token to change his/her profile (107ms)
     Delete User Route
-      ✔ it should an authenticated user to delete his/her account (8987ms)
+      ✔ it should an authenticated user to delete his/her account (6224ms)
       ✔ it should not allow an unauthenticated user to delete his/her account (108ms)
-      ✔ it should not allow a user with an invalid to delete his/her account (105ms)
+      ✔ it should not allow a user with an invalid to delete his/her account (107ms)
 
 
-  100 passing (5m)
+  98 passing (9m)
+  2 failing
+
+  1) Users
+       Get User Route
+         it should get a user from the database with given email:
+     Error: Timeout of 50000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/shikamaru/Documents/Projects/Task Management Application/test/tests/user.test.js)
+      at listOnTimeout (node:internal/timers:564:17)
+      at process.processTimers (node:internal/timers:507:7)
+
+  2) Users
+       Get User Route
+         it should get a user from the database with given username:
+     Error: Timeout of 50000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (/home/shikamaru/Documents/Projects/Task Management Application/test/tests/user.test.js)
+      at listOnTimeout (node:internal/timers:564:17)
+      at process.processTimers (node:internal/timers:507:7)
+
+
 
 ---------------------------------------|---------|----------|---------|---------|-------------------
 File                                   | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
