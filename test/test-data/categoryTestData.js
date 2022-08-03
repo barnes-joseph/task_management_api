@@ -8,7 +8,15 @@ const createCategoryData = () => {
 }
 
 const createRandomCategoryData = () => {
-    return {emoji:randEmoji({ength:1})[0],name:randAlpha({length:8}).join('')}
+    return {emoji:randEmoji({length:1})[0],name:randAlpha({length:8}).join('')}
 }
 
-module.exports = {createCategoryData,createRandomCategoryData};
+const createCategoriesData = () => {
+    const categories = [];
+    for (let i=0;i<5;i++){
+        categories.push({emoji:randEmoji({length:1})[0],name:randAlpha({length:8}).join('')})
+    }
+    return categories;
+}
+
+module.exports = {createCategoryData,createRandomCategoryData,createCategoriesData};

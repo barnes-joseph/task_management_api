@@ -327,7 +327,7 @@ describe('Categories',()=>{
                 res.should.have.status(200);
                 res.body.should.be.an('object');
                 res.body.should.have.property('category');
-                res.body.category.name.should.be.eql(updatedCategory.name);
+                res.body.category.should.be.eql(updatedCategory);
                 done();
             })
         });

@@ -5,16 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
-const multer = require('multer');
-const storage = multer.diskStorage({
-    destination:function(req,file,callback){
-        callback(null,'/assets/');
-    },
-    filename:function (req,file,callback){
-        callback(null,file.fieldname);
-    }
-})
-const upload = multer({dest:'./assets/profiles/'})
+
 
 const swaggerUI = require('swagger-ui-express');
 const swaggerFile = require('./api-docs/swagger_output.json');
@@ -33,7 +24,8 @@ app.use(cors({
     origin:'*'
 }))
 app.use(bodyParser.json())
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
+
 app.use('/api/docs',swaggerUI.serve,swaggerUI.setup(swaggerFile));
 app.use('/api/taskify/users',userRouter);
 app.use('/api/taskify/tasks',taskRouter);

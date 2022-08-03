@@ -31,17 +31,6 @@ async function checkUsernameExists(req,res,next){
     }
 }
 
-// async function checkUserExists(req,res,next){
-//     // check user exists
-//     const checkSql = `SELECT * FROM users WHERE user_id=$1`;
-//     const queryRes = await dbClient.query(checkSql,[req.jwtPayload.userId]);
-//     if(queryRes.rowCount===0){
-//         return res.status(404).json({error:"User not found"});
-//     }
-//     req.user = queryRes.rows[0];
-//     next();
-// }
-
 async function isValidUser(req,res,next){
     try{
         // retrieve user request
@@ -74,8 +63,6 @@ async function isValidUser(req,res,next){
                 user = queryRes.rows[0];
             }
         }
-        // console.log(user.password);
-        // console.log(requestUser.password)
         // check if password is valid
         const isValid = await bcrypt.compare(requestUser.password,user.password)
         if(!isValid){

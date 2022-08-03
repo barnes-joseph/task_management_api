@@ -1,9 +1,10 @@
 const taskRouter = require('express').Router();
 const {authenticateUser} = require('../middlewares/authenticateMiddleware')
-const {createTaskController, getAllTasksByUserIdController, getTaskByIdController, deleteTaskByIdController, getAllTasksByCategory, getAllTaskByDate, getAllTaskByPriority, getAllTaskByStatus, updateTaskByIdController} = require('../controllers/taskControllers')
+const {createTaskController, getAllTasksByUserIdController, getTaskByIdController, deleteTaskByIdController, getAllTasksByCategory, getAllTaskByDate, getAllTaskByPriority, getAllTaskByStatus, updateTaskByIdController} = require('../controllers/taskControllers');
+const { checkTaskCreateData } = require('../middlewares/taskMiddleware');
 
 taskRouter.get('/',authenticateUser,getAllTasksByUserIdController);
-taskRouter.post('/',authenticateUser,createTaskController);
+taskRouter.post('/',authenticateUser,checkTaskCreateData,createTaskController);
 
 taskRouter.get('/:taskId',authenticateUser,getTaskByIdController);
 taskRouter.delete('/:taskId',authenticateUser,deleteTaskByIdController);
