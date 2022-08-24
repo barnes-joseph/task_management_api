@@ -32,4 +32,5 @@ jobs:
       env:
         DATABASE_URL: postgres://wmwooebafjunrs:19e66365d8654239103b4a680a9ee198df22c47f91242f0c0c3f6b01cf7f9883@ec2-44-206-214-233.compute-1.amazonaws.com:5432/de3l38ruet51gd
         ENV: test
+        TOKEN_KEY: 23862dfaf0719dcb7877ab3ad7af04514133f886132dd89d5bcccf0478131074
         
