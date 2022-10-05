@@ -28,9 +28,47 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
-    - run: npm test
-      env:
-        DATABASE_URL: postgres://wmwooebafjunrs:19e66365d8654239103b4a680a9ee198df22c47f91242f0c0c3f6b01cf7f9883@ec2-44-206-214-233.compute-1.amazonaws.com:5432/de3l38ruet51gd
+  test:
+    - runs-on: ubuntu-latest
+
+    strategy:
+    matrix:
+      node-version: [12.x, 14.x, 16.x]
+    
+    - services:
+      postgres:
+        image: postgres
+
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+        
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+      # run steps required to test in the workflow
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Run tests
+        run: npm run test
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
         ENV: test
         TOKEN_KEY: 23862dfaf0719dcb7877ab3ad7af04514133f886132dd89d5bcccf0478131074
         
