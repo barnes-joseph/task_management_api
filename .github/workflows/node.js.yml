@@ -1,76 +1,49 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+name: Running Tests
 
-name: Node.js CI
-
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: [push]
 
 jobs:
-  build:
-
+  Test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-  test:
-    runs-on: ubuntu-latest
-
-    depends-on: build
-
-    strategy:
-    matrix:
-      node-version: [12.x, 14.x, 16.x]
-    
     services:
-    postgres:
-      image: postgres
+      postgres:
+        image: postgres
 
-      env:
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_USER: postgres
-        POSTGRES_DB: postgres
-      
-      options: >-
-        --health-cmd pg_isready
-        --health-interval 10s
-        --health-timeout 5s
-        --health-retries 5
-      ports:
-        - 5432:5432
-    
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
-      # run steps required to test in the workflow
+      # run steps required in the workflow
       - name: Checkout repository
         uses: actions/checkout@v2
-      
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+
+      - name: Set up Node.js 14.x
+        uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
-      
+          node-version: 14.x
+
       - name: Install dependencies
         run: npm install
-      
-      - name: Run tests
+
+      # - name: migrate database
+      #   run: node migrate.js
+      #   env:
+      #     DBURL: "postgres://postgres:postgres@localhost:5432/postgres"
+
+      - name: Run Tests
         run: npm run test
         env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
-        ENV: test
-        TOKEN_KEY: 23862dfaf0719dcb7877ab3ad7af04514133f886132dd89d5bcccf0478131074
+          DBURL: postgres://postgres:postgres@localhost:5432/postgres
+          TOKEN_KEY: 23862dfaf0719dcb7877ab3ad7af04514133f886132dd89d5bcccf0478131074
         
