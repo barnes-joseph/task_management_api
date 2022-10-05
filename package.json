@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/tests/subtask.test.js --timeout 50000 --colors --diff --exit",
+    "test": "mocha test/tests/*.js --timeout 50000 --colors --diff --exit",
     "test-with-coverage": "nyc --reporter=text mocha test/tests/*.js --timeout 50000 --exit",
     "swagger-autogen": "node ./api-docs/swagger.js",
     "startDev": "nodemon app.js",
