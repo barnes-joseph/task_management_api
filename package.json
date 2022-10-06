@@ -8,13 +8,20 @@
     "test-with-coverage": "nyc --reporter=text mocha test/tests/*.js --timeout 50000 --exit",
     "swagger-autogen": "node ./api-docs/swagger.js",
     "startDev": "nodemon app.js",
-    "start": "node app.js"
+    "start": "node app.js",
+    "lint": "eslint .  --ext .js",
+    "lint-fix": "eslint --fix .  --ext .js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.3.6",
+    "eslint": "^8.24.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.0.1",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.19",
     "nyc": "^15.1.0",

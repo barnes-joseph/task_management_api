@@ -56,4 +56,27 @@ jobs:
         env:
           DBURL: postgres://postgres:postgres@localhost:5432/postgres
           TOKEN_KEY: 23862dfaf0719dcb7877ab3ad7af04514133f886132dd89d5bcccf0478131074
-        
+
+  build-and-publish:
+    needs: build-and-test
+    name: build and publish to docker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: npm install
+        uses: actions/npm@master
+        with:
+          args: install     
+      - name: docker build
+        uses: actions/docker/cli@master
+        with:
+          args: build -t shikamaru05/task-management-api .
+      - name: docker login
+        uses: actions/docker/login@master
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      - name: docker push
+        uses: actions/docker/cli@master
+        with:
+          args: push shikamaru05/task-management-api 

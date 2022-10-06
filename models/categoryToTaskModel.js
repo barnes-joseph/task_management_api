@@ -1,11 +1,11 @@
-const {v4:uuidv4} = require('uuid');
+const { v4: uuidv4 } = require('uuid')
 
-class CategoryToTask{
-    constructor(categoryId,taskId){
-        this.entryId = uuidv4();
-        this.categoryId = categoryId;
-        this.taskId = taskId;
-    }
+class CategoryToTask {
+  constructor (categoryId, taskId) {
+    this.entryId = uuidv4()
+    this.categoryId = categoryId
+    this.taskId = taskId
+  }
 }
 
-module.exports = {CategoryToTask};
+module.exports = { CategoryToTask }

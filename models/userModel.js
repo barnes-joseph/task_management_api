@@ -1,19 +1,16 @@
-const {v4:uuidv4} = require('uuid');
-const path = require('path');
-const defaultProfile = 'assets/profiles/default-profile.png';
+const { v4: uuidv4 } = require('uuid')
+const path = require('path')
+const defaultProfile = 'assets/profiles/default-profile.png'
 
-
-class User{
-    constructor(user){
-        this.userId = uuidv4();
-        this.name = user.name;
-        this.email = user.email;
-        this.password = user.password;
-        this.username = user.username;
-        this.profile = defaultProfile;
-    }
+class User {
+  constructor (user) {
+    this.userId = uuidv4()
+    this.name = user.name
+    this.email = user.email
+    this.password = user.password
+    this.username = user.username
+    this.profile = defaultProfile
+  }
 }
 
-
-
-module.exports = {User};
+module.exports = { User }
