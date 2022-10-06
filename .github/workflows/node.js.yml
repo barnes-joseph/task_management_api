@@ -8,7 +8,7 @@ env:
   ENV: test
 
 jobs:
-  build and test:
+  build-and-test:
     runs-on: ubuntu-latest
 
     strategy:
